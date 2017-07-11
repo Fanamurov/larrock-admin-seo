@@ -11,7 +11,10 @@ class LarrockComponentAdminSeoServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(){}
+    public function boot()
+    {
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
+    }
 
     /**
      * Register the application services.
@@ -20,7 +23,6 @@ class LarrockComponentAdminSeoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        include __DIR__.'/routes.php';
         $this->app->make(SeoComponent::class);
     }
 }
