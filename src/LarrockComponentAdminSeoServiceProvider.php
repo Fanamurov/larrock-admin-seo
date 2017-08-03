@@ -3,6 +3,7 @@
 namespace Larrock\ComponentAdminSeo;
 
 use Illuminate\Support\ServiceProvider;
+use Larrock\ComponentAdminSeo\Middleware\GetSeo;
 
 class LarrockComponentAdminSeoServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,11 @@ class LarrockComponentAdminSeoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->make(SeoComponent::class);
+        $this->app->singleton('larrockseo', function() {
+            $class = config('larrock.components.seo', SeoComponent::class);
+            return new $class;
+        });
+
+        $this->app['router']->aliasMiddleware('GetSeo', GetSeo::class);
     }
 }

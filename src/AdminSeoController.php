@@ -7,25 +7,23 @@ use Breadcrumbs;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use Larrock\Core\AdminController;
 use Larrock\Core\Component;
-use Larrock\Core\Models\Seo;
+use Larrock\ComponentAdminSeo\Facades\LarrockSeo;
 use Redirect;
 use Validator;
 use View;
 use JsValidator;
 
-class AdminSeoController extends Controller
+class AdminSeoController extends AdminController
 {
-	protected $config;
-
 	public function __construct()
 	{
-        $Component = new SeoComponent();
-        $this->config = $Component->shareConfig();
+        $this->config = LarrockSeo::shareConfig();
 
         Breadcrumbs::setView('larrock::admin.breadcrumb.breadcrumb');
-        Breadcrumbs::register('admin.'. $this->config->name .'.index', function($breadcrumbs){
-            $breadcrumbs->push($this->config->title, '/admin/'. $this->config->name);
+        Breadcrumbs::register('admin.'. LarrockSeo::getName() .'.index', function($breadcrumbs){
+            $breadcrumbs->push(LarrockSeo::getTitle(), '/admin/'. LarrockSeo::getName());
         });
 	}
 
@@ -36,14 +34,7 @@ class AdminSeoController extends Controller
      */
     public function index()
     {
-		$data['data'] = Seo::orderBy('type_connect')->paginate(30);
-		//Для каждого пункта, где сеошка прикреплена по id_connect, достаем url
-        /** @noinspection ForeachSourceInspection */
-        foreach($data['data'] as $data_key => $data_value){
-			if(empty($data_value['url_connect'])){
-				$data['data'][$data_key]['url_connect'] = '~~~';
-			}
-		}
+		$data['data'] = LarrockSeo::getModel()->orderBy('seo_type_connect')->paginate(30);
 		return view('larrock::admin.admin-builder.index', $data);
     }
 
@@ -52,9 +43,9 @@ class AdminSeoController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create()
+	public function create(Request $request)
 	{
-        $test = Request::create('/admin/seo', 'POST', [
+        $test = Request::create('/admin/'. LarrockSeo::getName(), 'POST', [
             'seo_title' => 'Новый материал'
         ]);
         return $this->store($test);
@@ -68,15 +59,14 @@ class AdminSeoController extends Controller
      */
 	public function store(Request $request)
 	{
-        $validator = Validator::make($request->all(), Component::_valid_construct($this->config->valid));
+        $validator = Validator::make($request->all(), Component::_valid_construct(LarrockSeo::getValid()));
         if($validator->fails()){
             return back()->withInput($request->except('password'))->withErrors($validator);
         }
 
-		$data = new Seo();
-		if($data->fill($request->all())->save()){
+		if(LarrockSeo::getModel()->fill($request->all())->save()){
 			Alert::add('successAdmin', 'Seo '. $request->input('seo_title') .' добавлен')->flash();
-			return Redirect::to('/admin/'. $this->config->name .'/'. $data->id .'/edit')->withInput();
+			return Redirect::to('/admin/'. LarrockSeo::getName() .'/'. $data->id .'/edit')->withInput();
 		}
 
 		Alert::add('errorAdmin', 'Seo '. $request->input('seo_title') .' не добавлен')->flash();
@@ -91,19 +81,19 @@ class AdminSeoController extends Controller
 	 */
 	public function edit($id)
 	{
-		$data['data'] = Seo::findOrFail($id);
-        $data['app'] = $this->config->tabbable($data['data']);
+		$data['data'] = LarrockSeo::getModel()->findOrFail($id);
+        $data['app'] = LarrockSeo::tabbable($data['data']);
 
-        $validator = JsValidator::make(Component::_valid_construct($this->config, 'update', $id));
+        $validator = JsValidator::make(Component::_valid_construct(LarrockSeo::getConfig(), 'update', $id));
         View::share('validator', $validator);
 
-        Breadcrumbs::register('admin.'. $this->config->name .'.edit', function($breadcrumbs, $data)
+        Breadcrumbs::register('admin.'. LarrockSeo::getName() .'.edit', function($breadcrumbs, $data)
         {
-            $breadcrumbs->parent('admin.'. $this->config->name .'.index');
+            $breadcrumbs->parent('admin.'. LarrockSeo::getName() .'.index');
             $breadcrumbs->push($data->seo_title);
         });
 
-        return view('admin.admin-builder.edit', $data);
+        return view('larrock::admin.admin-builder.edit', $data);
 	}
 
 	/**
@@ -115,13 +105,12 @@ class AdminSeoController extends Controller
      */
 	public function update(Request $request, $id)
 	{
-        $validator = Validator::make($request->all(), Component::_valid_construct($this->config, 'update', $id));
+        $validator = Validator::make($request->all(), Component::_valid_construct(LarrockSeo::getConfig(), 'update', $id));
         if($validator->fails()){
             return back()->withInput($request->except('password'))->withErrors($validator);
         }
 
-		$data = Seo::find($id);
-		if($data->fill($request->all())->save()){
+		if(LarrockSeo::getModel()->find($id)->fill($request->all())->save()){
 			Alert::add('successAdmin', 'Seo '. $request->input('seo_title') .' изменен')->flash();
             \Cache::flush();
 			return back();
@@ -140,7 +129,7 @@ class AdminSeoController extends Controller
      */
 	public function destroy(Request $request, $id)
 	{
-		if($data = Seo::find($id)){
+		if($data = LarrockSeo::getModel()->find($id)){
             if($data->delete()){
                 Alert::add('successAdmin', 'Материал успешно удален')->flash();
             }else{
@@ -151,7 +140,7 @@ class AdminSeoController extends Controller
         }
 
         if($request->get('place') === 'material'){
-            return Redirect::to('/admin/'. $this->config->name);
+            return Redirect::to('/admin/'. LarrockSeo::getName());
         }
         return back();
 	}
