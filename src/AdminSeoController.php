@@ -21,7 +21,7 @@ class AdminSeoController extends AdminController
 	{
         $this->config = LarrockSeo::shareConfig();
 
-        Breadcrumbs::setView('larrock::admin.breadcrumb.breadcrumb');
+        \Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
         Breadcrumbs::register('admin.'. LarrockSeo::getName() .'.index', function($breadcrumbs){
             $breadcrumbs->push(LarrockSeo::getTitle(), '/admin/'. LarrockSeo::getName());
         });
