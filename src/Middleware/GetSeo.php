@@ -30,20 +30,24 @@ class GetSeo
             $data = LarrockSeo::getModel()->all();
             foreach ($data as $value){
                 if( !empty($value->seo_type_connect)){
-                    if($value->seo_type_connect === 'default'){
-                        $seo['url'][$value->seo_url_connect] = $value->seo_title;
-                    }else{
-                        $seo[$value->seo_type_connect] = $value->seo_title;
-                        if(strpos($value->seo_type_connect, 'postfix')){
-                            $seo[$value->seo_type_connect] = ' '. $seo[$value->seo_type_connect];
-                        }
-                        if(strpos($value->seo_type_connect, 'prefix')){
-                            $seo[$value->seo_type_connect] = $seo[$value->seo_type_connect] .' ';
-                        }
+                    $seo[$value->seo_type_connect] = $value->seo_title;
+                    if(strpos($value->seo_type_connect, 'postfix')){
+                        $seo[$value->seo_type_connect] = ' '. $seo[$value->seo_type_connect];
+                    }
+                    if(strpos($value->seo_type_connect, 'prefix')){
+                        $seo[$value->seo_type_connect] = $seo[$value->seo_type_connect] .' ';
                     }
                 }
             }
             return $seo;
+        });
+
+        //Собираем данные закрепленные за URL'ами
+        $current_url = last(\Route::current()->parameters());
+        $get_seo['url'] = Cache::remember('getSeoUrl'. $current_url, 1440, function(){
+            if($data = LarrockSeo::getModel()->whereSeoUrlConnect($current_url)->first()){
+                return $get_data->seo_title;
+            }
         });
 
         View::share('seo_midd', $get_seo);

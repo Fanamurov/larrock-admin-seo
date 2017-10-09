@@ -39,7 +39,6 @@ class SeoComponent extends Component
 
         $row = new FormSelectKey('seo_type_connect', 'Тип seo');
         $this->rows['seo_type_connect'] = $row->setOptions([
-            'default' => 'Обычный маркер',
             'postfix_global' => 'Постфикс для всего сайта',
             'prefix_global' => 'Префикс для всего сайта',
             'catalog_category_postfix' => 'Постфикс для раздела каталога',
@@ -50,6 +49,7 @@ class SeoComponent extends Component
             'page' => 'Материал статичной страницы',
             'feed' => 'Материал ленты',
             'category' => 'Материал раздела',
+            'url' => 'URL',
         ])->setCssClassGroup('uk-width-1-3')->setInTableAdmin();
 
         return $this;
