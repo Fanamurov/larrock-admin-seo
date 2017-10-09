@@ -44,7 +44,7 @@ class GetSeo
 
         //Собираем данные закрепленные за URL'ами
         $current_url = last(\Route::current()->parameters());
-        $get_seo['url'] = Cache::remember('getSeoUrl'. $current_url, 1440, function(){
+        $get_seo['url'] = Cache::remember('getSeoUrl'. $current_url, 1440, function() use ($current_url){
             if($data = LarrockSeo::getModel()->whereSeoUrlConnect($current_url)->first()){
                 return $get_data->seo_title;
             }
