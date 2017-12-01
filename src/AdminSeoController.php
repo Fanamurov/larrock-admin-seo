@@ -15,6 +15,7 @@ class AdminSeoController extends Controller
 
     public function __construct()
     {
+        $this->middleware(LarrockSeo::combineAdminMiddlewares());
         $this->config = LarrockSeo::shareConfig();
 
         \Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
