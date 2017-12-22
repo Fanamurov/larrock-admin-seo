@@ -15,6 +15,7 @@ class AdminSeoController extends Controller
 
     public function __construct()
     {
+        $this->shareMethods();
         $this->middleware(LarrockSeo::combineAdminMiddlewares());
         $this->config = LarrockSeo::shareConfig();
 
