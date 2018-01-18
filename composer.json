@@ -2,7 +2,7 @@
     "name": "fanamurov/larrock-admin-seo",
     "description": "SEO component for larrockCMS",
     "type": "library",
-    "license": "LGPL",
+    "license": "CC-BY-4.0",
     "authors": [
         {
             "name": "Alexandr Fanamurov",
@@ -23,7 +23,7 @@
                 "Larrock\\ComponentAdminSeo\\LarrockComponentAdminSeoServiceProvider"
             ],
             "aliases": {
-                "LarrockCategory": "Larrock\\ComponentAdminSeo\\Facades\\LarrockSeo"
+                "LarrockAdminSeo": "Larrock\\ComponentAdminSeo\\Facades\\LarrockSeo"
             }
         }
     }
