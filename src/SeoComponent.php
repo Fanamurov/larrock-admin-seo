@@ -60,6 +60,7 @@ class SeoComponent extends Component
         $count = \Cache::remember('count-data-admin-'. LarrockSeo::getName(), 1440, function(){
             return LarrockSeo::getModel()->count(['id']);
         });
-        return view('larrock::admin.sectionmenu.types.default', ['count' => $count, 'app' => LarrockSeo::getConfig(), 'url' => '/admin/'. LarrockSeo::getName()]);
+        return view('larrock::admin.sectionmenu.types.default', ['count' => $count, 'app' => LarrockSeo::getConfig(),
+            'url' => '/admin/'. LarrockSeo::getName()]);
     }
 }
