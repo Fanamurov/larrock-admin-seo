@@ -2,7 +2,6 @@
 
 namespace Larrock\ComponentAdminSeo;
 
-use Breadcrumbs;
 use Illuminate\Http\Request;
 
 use Larrock\ComponentAdminSeo\Facades\LarrockSeo;
@@ -18,11 +17,7 @@ class AdminSeoController extends Controller
         $this->shareMethods();
         $this->middleware(LarrockSeo::combineAdminMiddlewares());
         $this->config = LarrockSeo::shareConfig();
-
         \Config::set('breadcrumbs.view', 'larrock::admin.breadcrumb.breadcrumb');
-        Breadcrumbs::register('admin.'. LarrockSeo::getName() .'.index', function($breadcrumbs){
-            $breadcrumbs->push(LarrockSeo::getTitle(), '/admin/'. LarrockSeo::getName());
-        });
     }
 
     /**
