@@ -14,9 +14,6 @@
             "Larrock\\ComponentAdminSeo\\": "src"
         }
     },
-    "require": {
-        "fanamurov/larrock-core": "^1.0"
-    },
     "extra": {
         "laravel": {
             "providers": [
