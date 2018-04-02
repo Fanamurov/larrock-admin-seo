@@ -2,10 +2,10 @@
 
 namespace Larrock\ComponentAdminSeo;
 
-use Illuminate\Http\Request;
 use LarrockAdminSeo;
-use Larrock\Core\Traits\AdminMethods;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Larrock\Core\Traits\AdminMethods;
 
 class AdminSeoController extends Controller
 {
@@ -27,6 +27,7 @@ class AdminSeoController extends Controller
     public function index()
     {
         $data['data'] = LarrockAdminSeo::getModel()->orderBy('seo_type_connect')->paginate(30);
+
         return view('larrock::admin.admin-builder.index', $data);
     }
 
@@ -37,9 +38,10 @@ class AdminSeoController extends Controller
      */
     public function create()
     {
-        $test = Request::create('/admin/'. LarrockAdminSeo::getName(), 'POST', [
-            'seo_title' => 'Новый материал'
+        $test = Request::create('/admin/'.LarrockAdminSeo::getName(), 'POST', [
+            'seo_title' => 'Новый материал',
         ]);
+
         return $this->store($test);
     }
 }
