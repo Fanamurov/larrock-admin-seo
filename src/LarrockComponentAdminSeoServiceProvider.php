@@ -24,8 +24,9 @@ class LarrockComponentAdminSeoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('larrockseo', function() {
+        $this->app->singleton('larrockseo', function () {
             $class = config('larrock.components.seo', SeoComponent::class);
+
             return new $class;
         });
 

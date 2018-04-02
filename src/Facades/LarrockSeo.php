@@ -13,5 +13,4 @@ class LarrockSeo extends Facade
     {
         return 'larrockseo';
     }
-
 }
