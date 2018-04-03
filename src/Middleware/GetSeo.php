@@ -18,7 +18,7 @@ class GetSeo
      */
     public function handle($request, Closure $next)
     {
-        $get_seo = Cache::remember('SEO_midd', 1440, function () {
+        $get_seo = Cache::rememberForever('SEO_midd', function () {
             $seo = [];
 
             foreach (LarrockSeo::getRows()['seo_type_connect']->options as $type_key => $type) {
@@ -35,7 +35,7 @@ class GetSeo
                         $seo[$value->seo_type_connect] = ' '.$seo[$value->seo_type_connect];
                     }
                     if (strpos($value->seo_type_connect, 'prefix')) {
-                        $seo[$value->seo_type_connect] = $seo[$value->seo_type_connect].' ';
+                        $seo[$value->seo_type_connect] .= ' ';
                     }
                 }
             }
@@ -45,7 +45,7 @@ class GetSeo
 
         //Собираем данные закрепленные за URL'ами
         $current_url = last(\Route::current()->parameters());
-        $get_seo['url'] = Cache::remember('getSeoUrl'.$current_url, 1440, function () use ($current_url) {
+        $get_seo['url'] = Cache::rememberForever('getSeoUrl'.$current_url, function () use ($current_url) {
             if ($get_data = LarrockSeo::getModel()->whereSeoUrlConnect($current_url)->first()) {
                 return $get_data->seo_title;
             }

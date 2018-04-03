@@ -40,6 +40,7 @@ class AdminSeoController extends Controller
     {
         $test = Request::create('/admin/'.LarrockAdminSeo::getName(), 'POST', [
             'seo_title' => 'Новый материал',
+            'seo_type_connect' => 'default',
         ]);
 
         return $this->store($test);
