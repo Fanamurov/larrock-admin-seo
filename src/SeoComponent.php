@@ -23,23 +23,23 @@ class SeoComponent extends Component
     protected function addRows()
     {
         $row = new FormInput('seo_title', 'Title');
-        $this->rows['seo_title'] = $row->setValid('max:255|required')->setTypo()->setInTableAdmin()
-            ->setFillable()->setMobileAdminVisible();
+        $this->setRow($row->setValid('max:255|required')->setTypo()->setInTableAdmin()
+            ->setFillable()->setMobileAdminVisible());
 
         $row = new FormTextarea('seo_description', 'Description');
-        $this->rows['seo_description'] = $row->setTypo()->setInTableAdmin()->setNotEditor()->setFillable();
+        $this->setRow($row->setTypo()->setInTableAdmin()->setNotEditor()->setFillable());
 
         $row = new FormTextarea('seo_keywords', 'Keywords');
-        $this->rows['seo_keywords'] = $row->setNotEditor()->setFillable();
+        $this->setRow($row->setNotEditor()->setFillable());
 
         $row = new FormInput('seo_id_connect', 'ID материала (опционально)');
-        $this->rows['seo_id_connect'] = $row->setInTableAdmin()->setCssClassGroup('uk-width-1-3')->setFillable();
+        $this->setRow($row->setInTableAdmin()->setCssClassGroup('uk-width-1-3')->setFillable());
 
         $row = new FormInput('seo_url_connect', 'URL материала (опционально)');
-        $this->rows['seo_url_connect'] = $row->setInTableAdmin()->setCssClassGroup('uk-width-1-3')->setFillable();
+        $this->setRow($row->setInTableAdmin()->setCssClassGroup('uk-width-1-3')->setFillable());
 
         $row = new FormSelectKey('seo_type_connect', 'Тип seo');
-        $this->rows['seo_type_connect'] = $row->setOptions([
+        $this->setRow($row->setOptions([
             'postfix_global' => 'Постфикс для всего сайта',
             'prefix_global' => 'Префикс для всего сайта',
             'catalog_category_postfix' => 'Постфикс для раздела каталога',
@@ -51,7 +51,7 @@ class SeoComponent extends Component
             'feed' => 'Материал ленты',
             'category' => 'Материал раздела',
             'url' => 'URL',
-        ])->setCssClassGroup('uk-width-1-3')->setInTableAdmin()->setFillable();
+        ])->setCssClassGroup('uk-width-1-3')->setInTableAdmin()->setFillable());
 
         return $this;
     }
