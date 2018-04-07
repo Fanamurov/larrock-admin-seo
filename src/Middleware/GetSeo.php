@@ -5,7 +5,7 @@ namespace Larrock\ComponentAdminSeo\Middleware;
 use View;
 use Cache;
 use Closure;
-use Larrock\ComponentAdminSeo\Facades\LarrockSeo;
+use LarrockAdminSeo;
 
 class GetSeo
 {
@@ -21,13 +21,13 @@ class GetSeo
         $get_seo = Cache::rememberForever('SEO_midd', function () {
             $seo = [];
 
-            foreach (LarrockSeo::getRows()['seo_type_connect']->options as $type_key => $type) {
+            foreach (LarrockAdminSeo::getRows()['seo_type_connect']->options as $type_key => $type) {
                 if (! empty($type_key) && ! array_key_exists($type_key, $seo)) {
                     $seo[$type_key] = null;
                 }
             }
 
-            $data = LarrockSeo::getModel()->all();
+            $data = LarrockAdminSeo::getModel()->all();
             foreach ($data as $value) {
                 if (! empty($value->seo_type_connect)) {
                     $seo[$value->seo_type_connect] = $value->seo_title;
@@ -46,7 +46,7 @@ class GetSeo
         //Собираем данные закрепленные за URL'ами
         $current_url = last(\Route::current()->parameters());
         $get_seo['url'] = Cache::rememberForever('getSeoUrl'.$current_url, function () use ($current_url) {
-            if ($get_data = LarrockSeo::getModel()->whereSeoUrlConnect($current_url)->first()) {
+            if ($get_data = LarrockAdminSeo::getModel()->whereSeoUrlConnect($current_url)->first()) {
                 return $get_data->seo_title;
             }
         });
